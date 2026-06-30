@@ -584,16 +584,76 @@ const STATIONS_RAW = [
     streamUrl: 'https://wevl.streamguys1.com/live',
     siteUrl: 'https://wevl.org/',
     color: '#ff6b35'
+  },
+  {
+    id: 'wncw',
+    name: 'WNCW',
+    freq: 88.7,
+    band: 'FM',
+    city: 'Spindale, NC',
+    desc: 'Listener-powered Americana, bluegrass, and roots music out of the Blue Ridge Mountains, with NPR news woven through the schedule.',
+    tags: ['Americana', 'Bluegrass', 'Roots'],
+    eyebrow: 'Listener-powered',
+    streamUrl: 'https://wncw-live-a.edge.audiocdn.com/6286_56k.aac',
+    siteUrl: 'https://www.wncw.org/',
+    color: '#3a7d6b'
+  },
+  {
+    id: 'studioone',
+    name: 'Studio One',
+    freq: 90.1,
+    band: 'FM',
+    city: 'Des Moines, IA',
+    desc: 'Iowa Public Radio\'s alternative station — indie rock, alt, and deep cuts from local hosts who actually know Iowa\'s music scene.',
+    tags: ['Indie', 'Alternative', 'Public Radio'],
+    eyebrow: 'Iowa Public Radio',
+    streamUrl: 'https://studioone-stream.iowapublicradio.org/StudioOne.mp3',
+    siteUrl: 'https://www.studioone.org/',
+    color: '#c4632b'
+  },
+  {
+    id: 'thecurrent',
+    name: 'The Current',
+    freq: 89.3,
+    band: 'FM',
+    city: 'Minneapolis, MN',
+    desc: 'Minnesota Public Radio\'s indie and alternative station — new music alongside the music that made it, from local to legendary.',
+    tags: ['Indie', 'Alternative', 'Public Radio'],
+    eyebrow: 'Great Music Lives Here',
+    streamUrl: 'https://current.stream.publicradio.org/current.mp3',
+    siteUrl: 'https://www.thecurrent.org/',
+    color: '#3a7d6b'
+  },
+  {
+    id: 'kcrw',
+    name: 'KCRW',
+    freq: 89.9,
+    band: 'FM',
+    city: 'Santa Monica, CA',
+    desc: 'LA\'s essential public radio station — Eclectic24 is the all-music stream of KCRW\'s DJs running round the clock, no talk breaks.',
+    tags: ['Eclectic', 'Freeform', 'Public Radio'],
+    eyebrow: 'Eclectic24',
+    streamUrl: 'https://streams.kcrw.com/e24_mp3',
+    siteUrl: 'https://www.kcrw.com/',
+    color: '#ff6b35'
+  },
+  {
+    id: 'soho',
+    name: 'Soho Radio',
+    freq: null,
+    band: 'Online',
+    city: 'London, UK',
+    desc: 'DJ-driven London station from the heart of Soho — underground house, soul, jazz, and electronic culture, no algorithms.',
+    tags: ['House', 'Electronic', 'Independent'],
+    eyebrow: 'Broadcasting from Soho',
+    streamUrl: 'https://sohoradiomusic.doughunt.co.uk:8010/320mp3',
+    siteUrl: 'https://sohoradiolondon.com/',
+    color: '#c4632b'
   }
 ];
 
 // stations with no embeddable stream — text link-outs only, shown in footer
 const LINK_OUT_STATIONS = [
-  {
-    name: 'WNCW 88.7',
-    city: 'Spindale, NC',
-    siteUrl: 'https://www.wncw.org/listen-live'
-  },
   {
     name: 'WUTC 88.1',
     city: 'Chattanooga, TN',
@@ -608,11 +668,6 @@ const LINK_OUT_STATIONS = [
     name: 'WPRB',
     city: 'Princeton, NJ',
     siteUrl: 'https://listen.wprb.com'
-  },
-  {
-    name: 'The Current',
-    city: 'Minneapolis, MN',
-    siteUrl: 'https://www.thecurrent.org/streams'
   },
   // https streams not available — http-only Icecast servers, blocked by browser mixed-content policy
   {
@@ -632,8 +687,11 @@ const LINK_OUT_STATIONS = [
   }
 ];
 
-// ordered by frequency ascending, ties broken alphabetically by call letters
+// ordered by frequency ascending, ties broken alphabetically; null freq goes to end
 const STATIONS = [...STATIONS_RAW].sort((a, b) => {
+  if(a.freq === null && b.freq === null) return a.name.localeCompare(b.name);
+  if(a.freq === null) return 1;
+  if(b.freq === null) return -1;
   if(a.freq !== b.freq) return a.freq - b.freq;
   return a.name.localeCompare(b.name);
 });
@@ -651,8 +709,8 @@ function buildDrum(){
     el.setAttribute('data-index', i);
     el.setAttribute('role', 'button');
     el.setAttribute('tabindex', '0');
-    el.setAttribute('aria-label', `${st.name}, ${st.freq.toFixed(1)} FM`);
-    el.innerHTML = `<span class="call">${st.name.split(' ')[0]}</span><span class="freq">${st.freq.toFixed(1)}</span>`;
+    el.setAttribute('aria-label', `${st.name}, ${st.freq ? st.freq.toFixed(1) + ' FM' : 'Online'}`);
+    el.innerHTML = `<span class="call">${st.name.split(' ')[0]}</span><span class="freq">${st.freq ? st.freq.toFixed(1) : 'Online'}</span>`;
     el.addEventListener('click', () => {
       if(i === drumIndex){ selectStation(st.id, { play: true }); }
       else { drumIndex = i; renderDrum(); selectStation(st.id); }
@@ -705,7 +763,7 @@ function buildGrid(){
     card.setAttribute('tabindex', '0');
     card.innerHTML = `
       <div class="card-top">
-        <span class="c-freq">${st.freq.toFixed(1)}</span>
+        <span class="c-freq">${st.freq ? st.freq.toFixed(1) : '—'}</span>
         <span class="c-band">${st.band}</span>
       </div>
       <p class="c-name">${st.name}</p>
@@ -753,7 +811,7 @@ function selectStation(id){
   if(!st) return;
   current = st;
 
-  document.getElementById('readoutName').textContent = `${st.name} · ${st.freq.toFixed(1)}`;
+  document.getElementById('readoutName').textContent = `${st.name} · ${st.freq ? st.freq.toFixed(1) : 'Online'}`;
   document.documentElement.style.setProperty('--needle', st.color);
 
   document.querySelectorAll('.drum-item').forEach(el => {
