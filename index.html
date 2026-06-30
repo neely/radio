@@ -1,0 +1,981 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Dial</title>
+<meta name="theme-color" content="#1a1d1f">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Source+Sans+3:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1a1d1f;
+    --paper:#f3efe7;
+    --panel:#e8e2d4;
+    --tape:#c4b8a4;
+    --needle:#ff6b35;
+    --teal:#3a7d6b;
+    --line: rgba(26,29,31,0.14);
+    --radius: 3px;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Source Sans 3', system-ui, sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .wrap{
+    max-width:920px;
+    margin:0 auto;
+    padding:0 20px 80px;
+  }
+
+  /* ---------- Header ---------- */
+  header{
+    padding:36px 20px 18px;
+    max-width:920px;
+    margin:0 auto;
+  }
+  .title{
+    font-family:'Barlow Condensed', sans-serif;
+    font-weight:700;
+    font-size:clamp(2.4rem, 7vw, 3.6rem);
+    letter-spacing:-0.01em;
+    line-height:0.95;
+    margin:0;
+    text-transform:uppercase;
+  }
+  .title em{
+    font-style:normal;
+    color:var(--needle);
+  }
+  .subhead{
+    font-size:0.98rem;
+    color:#5a5650;
+    max-width:46ch;
+    margin:10px 0 0;
+    line-height:1.5;
+  }
+
+  /* ---------- Drum tuner (the signature element) ---------- */
+  .dial-shell{
+    position:sticky;
+    top:0;
+    z-index:50;
+    background:var(--ink);
+    border-bottom:2px solid var(--needle);
+    padding:10px 0 0;
+  }
+  .dial-inner{
+    max-width:920px;
+    margin:0 auto;
+    padding:0 20px 12px;
+  }
+  .dial-readout{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    margin-bottom:8px;
+    font-family:'JetBrains Mono', monospace;
+    color:var(--tape);
+    font-size:0.72rem;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+  }
+  .dial-readout .now-tuned{
+    color:var(--paper);
+    font-size:0.78rem;
+  }
+  .dial-readout .now-tuned b{
+    color:var(--needle);
+    font-weight:600;
+  }
+
+  .drum{
+    position:relative;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .drum-nav{
+    width:30px;
+    height:30px;
+    border-radius:50%;
+    border:1px solid rgba(196,184,164,0.4);
+    background:transparent;
+    color:var(--paper);
+    cursor:pointer;
+    flex-shrink:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:0.9rem;
+    line-height:1;
+    transition:border-color 0.15s ease, color 0.15s ease;
+  }
+  .drum-nav:hover{ border-color:var(--needle); color:var(--needle); }
+
+  .drum-track-wrap{
+    position:relative;
+    flex:1;
+    height:54px;
+    overflow:hidden;
+  }
+  .drum-fade-l, .drum-fade-r{
+    position:absolute;
+    top:0; bottom:0;
+    width:36px;
+    z-index:3;
+    pointer-events:none;
+  }
+  .drum-fade-l{ left:0; background:linear-gradient(90deg, var(--ink), transparent); }
+  .drum-fade-r{ right:0; background:linear-gradient(270deg, var(--ink), transparent); }
+  .drum-center-tick{
+    position:absolute;
+    top:6px; bottom:6px;
+    left:50%;
+    width:2px;
+    background:var(--needle);
+    opacity:0.55;
+    z-index:1;
+  }
+  .drum-track{
+    position:relative;
+    height:100%;
+  }
+  .drum-item{
+    position:absolute;
+    top:50%; left:50%;
+    transform:translate(-50%,-50%);
+    text-align:center;
+    cursor:pointer;
+    white-space:nowrap;
+    transition:transform 0.4s cubic-bezier(.2,.8,.2,1), opacity 0.4s ease, font-size 0.3s ease;
+  }
+  .drum-item .call{
+    display:block;
+    font-family:'Barlow Condensed', sans-serif;
+    font-weight:700;
+    text-transform:uppercase;
+    color:var(--tape);
+    transition:color 0.25s ease;
+  }
+  .drum-item .freq{
+    display:block;
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.6em;
+    color:var(--tape);
+    opacity:0.6;
+    margin-top:2px;
+    transition:color 0.25s ease, opacity 0.25s ease;
+  }
+  .drum-item.active .call{ color:var(--paper); }
+  .drum-item.active .freq{ color:var(--needle); opacity:1; }
+
+  audio{ display:none; }
+
+  /* ---------- Station grid ---------- */
+  .grid-heading{
+    margin:48px 0 16px;
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    gap:12px;
+  }
+  .grid-heading h2{
+    font-family:'Barlow Condensed', sans-serif;
+    text-transform:uppercase;
+    font-weight:700;
+    font-size:1.1rem;
+    letter-spacing:0.03em;
+    margin:0;
+  }
+  .grid-heading .count{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.72rem;
+    color:#7a756a;
+  }
+
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(260px,1fr));
+    gap:12px;
+  }
+  .card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:16px 18px;
+    cursor:pointer;
+    text-align:left;
+    position:relative;
+    transition:border-color 0.15s ease, background 0.15s ease;
+  }
+  .card:hover{ border-color:var(--needle); }
+  .card.active{
+    background:var(--ink);
+    border-color:var(--ink);
+  }
+  .card.active .c-name, .card.active .c-loc{ color:var(--paper); }
+  .card.active .c-freq{ color:var(--needle); }
+  .card-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    gap:8px;
+    padding-right:34px;
+  }
+  .c-freq{
+    font-family:'Barlow Condensed', sans-serif;
+    font-weight:700;
+    font-size:1.5rem;
+    color:var(--ink);
+    line-height:1;
+  }
+  .c-band{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.65rem;
+    color:#8a8478;
+  }
+  .c-name{
+    font-weight:600;
+    font-size:0.95rem;
+    margin:6px 0 2px;
+    color:var(--ink);
+  }
+  .c-loc{
+    font-size:0.78rem;
+    color:#7a756a;
+    margin:0;
+  }
+  .c-genre{
+    margin-top:10px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.65rem;
+    text-transform:uppercase;
+    letter-spacing:0.04em;
+    color:var(--teal);
+  }
+  .card-play{
+    position:absolute;
+    top:14px;
+    right:14px;
+    width:28px;
+    height:28px;
+    border-radius:50%;
+    border:none;
+    background:rgba(26,29,31,0.08);
+    color:var(--ink);
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:background 0.15s ease, transform 0.12s ease;
+    z-index:2;
+  }
+  .card.active .card-play{
+    background:var(--needle);
+    color:var(--ink);
+  }
+  .card-play:hover{ transform:scale(1.08); }
+  .card-play:active{ transform:scale(0.94); }
+  .card-play svg{ width:11px; height:11px; }
+  .card-status{
+    margin-top:10px;
+    display:flex;
+    align-items:center;
+    gap:6px;
+    min-height:14px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.62rem;
+    letter-spacing:0.03em;
+    text-transform:uppercase;
+    color:#8a8478;
+  }
+  .card.active .card-status{ color:var(--tape); }
+  .card-status .dot-wave{
+    display:flex;
+    align-items:center;
+    gap:2px;
+    height:10px;
+  }
+  .card-status .dot-wave span{
+    width:2px;
+    background:var(--needle);
+    border-radius:1px;
+    height:3px;
+    opacity:0.4;
+  }
+  .card-status.live .dot-wave span{ opacity:1; }
+  .card-track{
+    margin-top:4px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.66rem;
+    color:var(--needle);
+    display:none;
+  }
+  .card-track.show{ display:block; }
+
+  /* ---------- Link-out row (no embeddable stream) ---------- */
+  .linkout-row{
+    margin-top:18px;
+    padding-top:14px;
+    border-top:1px solid var(--line);
+    font-size:0.78rem;
+    color:#8a8478;
+    line-height:1.7;
+  }
+  .linkout-row .lo-label{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.65rem;
+    text-transform:uppercase;
+    letter-spacing:0.05em;
+    color:#8a8478;
+    margin-right:8px;
+  }
+  .linkout-row a{
+    color:#5a5650;
+    text-decoration:underline;
+    margin-right:14px;
+    white-space:nowrap;
+  }
+  .linkout-row a:hover{ color:var(--needle); }
+
+  /* ---------- Footer ---------- */
+  footer{
+    margin-top:56px;
+    padding-top:18px;
+    border-top:1px solid var(--line);
+    font-size:0.8rem;
+    color:#8a8478;
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+  footer a{ color:#5a5650; text-decoration:underline; }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ transition:none !important; }
+  }
+
+  @media (max-width:560px){
+    .now-top{ flex-direction:column; }
+    .now-freq{ text-align:left; }
+    .open-native{ margin-left:0; width:100%; }
+  }
+</style>
+</head>
+<body>
+
+<div class="dial-shell">
+  <div class="dial-inner">
+    <div class="dial-readout">
+      <span>five stations</span>
+      <span class="now-tuned">tuned to <b id="readoutName">—</b></span>
+    </div>
+    <div class="drum">
+      <button class="drum-nav" id="drumPrev" aria-label="Previous station">‹</button>
+      <div class="drum-track-wrap">
+        <div class="drum-center-tick"></div>
+        <div class="drum-fade-l"></div>
+        <div class="drum-fade-r"></div>
+        <div class="drum-track" id="drumTrack"></div>
+      </div>
+      <button class="drum-nav" id="drumNext" aria-label="Next station">›</button>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <header>
+    <h1 class="title">The Dial<em>.</em></h1>
+    <p class="subhead">Stations worth keeping on. Tap a frequency to tune in — nothing here leaves this page.</p>
+  </header>
+
+  <div class="grid-heading">
+    <h2>All stations</h2>
+    <span class="count" id="gridCount">— / community &amp; public radio</span>
+  </div>
+
+  <div class="grid" id="stationGrid"></div>
+
+  <p class="linkout-row" id="linkoutRow"></p>
+
+  <footer>
+    <span>Built for one page, not for sale. Streams belong to their stations.</span>
+    <span>Source on <a href="#" id="ghLink">GitHub</a></span>
+  </footer>
+
+</div>
+
+<audio id="audioEl" preload="none"></audio>
+
+<script>
+const STATIONS_RAW = [
+  {
+    id: 'ohm',
+    name: 'Ohm Radio 96.3',
+    freq: 96.3,
+    band: 'FM',
+    city: 'Charleston, SC',
+    desc: "Charleston's commercial-free community station — local DJs, local bands, no corporate playlists since 2015.",
+    tags: ['Community', 'Local', 'Freeform'],
+    eyebrow: 'Commercial-free since 2015',
+    streamUrl: 'https://das-edge16-live365-dal02.cdnstream.com/a92834',
+    siteUrl: 'https://www.ohmradio963.org/',
+    color: '#ff6b35'
+  },
+  {
+    id: 'wrek',
+    name: 'WREK',
+    freq: 91.1,
+    band: 'FM',
+    city: 'Atlanta, GA',
+    desc: 'Georgia Tech\u2019s entirely student-run station — 100,000 watts, 24/7, genre-hopping specialty shows and sound blocks.',
+    tags: ['Student-run', 'Freeform', '100kW'],
+    eyebrow: 'Run by Georgia Tech students',
+    streamUrl: 'https://streaming.wrek.org/main/128kb.mp3',
+    siteUrl: 'https://www.wrek.org/',
+    color: '#c4632b',
+    nowPlayingUrl: 'https://streaming.wrek.org/status-json.xsl',
+    parseNowPlaying(data){
+      try{
+        const sources = data.icestats && data.icestats.source;
+        const list = Array.isArray(sources) ? sources : [sources];
+        const main = list.find(s => s && s.listenurl && s.listenurl.includes('/main/')) || list[0];
+        return main ? (main.title || main.yp_currently_playing || null) : null;
+      } catch(e){ return null; }
+    }
+  },
+  {
+    id: 'kzsc',
+    name: 'KZSC',
+    freq: 88.1,
+    band: 'FM',
+    city: 'Santa Cruz, CA',
+    desc: 'UC Santa Cruz\u2019s student and community station. From the trees to the seas — and the exclusive home of Banana Slug sports.',
+    tags: ['Student-run', 'Community', 'College'],
+    eyebrow: 'From the trees to the seas',
+    streamUrl: 'https://kzscfms1-geckohost.radioca.st/kzschigh',
+    siteUrl: 'https://kzsc.org/listen/',
+    color: '#ff6b35',
+    nowPlayingUrl: 'https://kzscfms1-geckohost.radioca.st/status-json.xsl',
+    parseNowPlaying: parseIcecastJson
+  },
+  {
+    id: 'kexp',
+    name: 'KEXP 90.3',
+    freq: 90.3,
+    band: 'FM',
+    city: 'Seattle, WA',
+    desc: 'Listener-powered freeform radio out of Seattle — wide-ranging music discovery and famous in-studio live sessions.',
+    tags: ['Freeform', 'Indie', 'Discovery'],
+    eyebrow: 'Listener-powered',
+    streamUrl: 'https://kexp.streamguys1.com/kexp160.aac',
+    siteUrl: 'https://www.kexp.org/',
+    color: '#3a7d6b',
+    nowPlayingUrl: 'https://api.kexp.org/v2/plays/',
+    parseNowPlaying(data){
+      try{
+        const track = data.results && data.results[0];
+        if(!track) return null;
+        const artist = track.artist || '';
+        const song = track.song || '';
+        if(!artist && !song) return null;
+        return [artist, song].filter(Boolean).join(' — ');
+      } catch(e){ return null; }
+    }
+  },
+  {
+    id: 'fip',
+    name: 'FIP',
+    freq: 105.1,
+    band: 'FM · Paris',
+    city: 'Paris, France',
+    desc: 'French public radio with no fixed format — jazz, chanson, world, electronic, and classical hand-picked so consecutive tracks always flow, day or night.',
+    tags: ['Eclectic', 'Commercial-free', 'International'],
+    eyebrow: 'Commercial-free since 1971',
+    streamUrl: 'https://icecast.radiofrance.fr/fip-midfi.mp3?id=radiofrance',
+    siteUrl: 'https://www.radiofrance.fr/fip',
+    color: '#c4632b',
+    nowPlayingUrl: 'https://www.radiofrance.fr/fip/api/live',
+    parseNowPlaying(data){
+      try{
+        // shape is not fully confirmed publicly — try a few plausible paths
+        // and fail silently rather than guess wrong in the UI
+        const now = data.now || data.current || data;
+        const song = now && (now.song || now.firstLine);
+        const title = song && (song.title || song.interpreters);
+        if(title) return Array.isArray(title) ? title.join(', ') : title;
+        return null;
+      } catch(e){ return null; }
+    }
+  },
+  {
+    id: 'wfmu',
+    name: 'WFMU',
+    freq: 91.1,
+    band: 'FM',
+    city: 'Jersey City, NJ',
+    desc: 'The longest-running freeform station in the US, on air since 1958 — utterly unpredictable, utterly independent.',
+    tags: ['Freeform', 'Independent', 'Since 1958'],
+    eyebrow: 'Freeform since 1958',
+    streamUrl: 'http://stream0.wfmu.org/freeform-128k-primary.mp3',
+    siteUrl: 'https://wfmu.org/',
+    color: '#3a7d6b',
+    nowPlayingUrl: 'http://stream0.wfmu.org/status-json.xsl',
+    parseNowPlaying: parseIcecastJson
+  },
+  {
+    id: 'wwoz',
+    name: 'WWOZ',
+    freq: 90.7,
+    band: 'FM',
+    city: 'New Orleans, LA',
+    desc: "New Orleans' own — jazz, funk, brass, and soul straight from the city that invented most of it.",
+    tags: ['Jazz', 'Funk', 'Local'],
+    eyebrow: "New Orleans' community station",
+    streamUrl: 'http://wwoz-sc.streamguys.com/wwoz-hi.mp3',
+    siteUrl: 'https://www.wwoz.org/',
+    color: '#ff6b35'
+  },
+  {
+    id: 'wxyc',
+    name: 'WXYC',
+    freq: 89.3,
+    band: 'FM',
+    city: 'Chapel Hill, NC',
+    desc: 'UNC Chapel Hill\u2019s freeform student station — and the first radio station in the world to webcast, back in 1994.',
+    tags: ['Freeform', 'Student-run', 'College'],
+    eyebrow: 'First to webcast, 1994',
+    streamUrl: 'http://audio-mp3.ibiblio.org:8000/wxyc.mp3',
+    siteUrl: 'http://www.wxyc.info/',
+    color: '#c4632b',
+    nowPlayingUrl: 'http://audio-mp3.ibiblio.org:8000/status-json.xsl',
+    parseNowPlaying: parseIcecastJson
+  },
+  {
+    id: 'kutx',
+    name: 'KUTX 98.9',
+    freq: 98.9,
+    band: 'FM',
+    city: 'Austin, TX',
+    desc: "Austin's music station — indie rock, Americana, and the deep well of Texas music, from the team behind KUT.",
+    tags: ['Indie', 'Americana', 'Texas Music'],
+    eyebrow: 'The Austin Music Experience',
+    streamUrl: 'https://streams.kut.org/4428_192.mp3?aw_0_1st.playerid=kutx-free',
+    siteUrl: 'https://kutx.org/',
+    color: '#3a7d6b'
+  },
+  {
+    id: 'wrfg',
+    name: 'WRFG',
+    freq: 89.3,
+    band: 'FM',
+    city: 'Atlanta, GA',
+    desc: 'Radio Free Georgia — progressive information and hand-picked music for Atlanta since 1973, broadcasting at 100,000 watts.',
+    tags: ['Progressive', 'Community', '100kW'],
+    eyebrow: 'Since 1973',
+    streamUrl: 'https://s2.radio.co/s2133c4bad/listen',
+    siteUrl: 'https://wrfg.org/',
+    color: '#ff6b35'
+  },
+  {
+    id: 'wtul',
+    name: 'WTUL',
+    freq: 91.5,
+    band: 'FM',
+    city: 'New Orleans, LA',
+    desc: "Tulane's progressive, independent student station — a deep mix of new and underground music since the 1970s.",
+    tags: ['Progressive', 'Student-run', 'Independent'],
+    eyebrow: "Tulane's own",
+    streamUrl: 'http://129.81.255.83:8000/stream',
+    siteUrl: 'https://www.wtulneworleans.com/',
+    color: '#c4632b'
+  },
+  {
+    id: 'wuog',
+    name: 'WUOG',
+    freq: 90.5,
+    band: 'FM',
+    city: 'Athens, GA',
+    desc: "UGA's student-run alternative outlet, broadcasting at 26,000 watts since 1972 — strict rules about who gets airtime keep it weird.",
+    tags: ['Alternative', 'Student-run', 'College'],
+    eyebrow: '26,000 watts since 1972',
+    streamUrl: 'http://stream.wuog.org:8000/stream',
+    siteUrl: 'https://wuog.org/',
+    color: '#3a7d6b'
+  },
+  {
+    id: 'wevl',
+    name: 'WEVL',
+    freq: 89.9,
+    band: 'FM',
+    city: 'Memphis, TN',
+    desc: "Memphis' independent, all-volunteer station since 1976 — Stax soul, blues, rock, and roots, voted the city's best.",
+    tags: ['Soul', 'Blues', 'Volunteer-run'],
+    eyebrow: 'On air since 1976',
+    streamUrl: 'http://wevl.streamguys1.com/live',
+    siteUrl: 'https://wevl.org/',
+    color: '#ff6b35'
+  }
+];
+
+// stations with no embeddable stream — text link-outs only, shown in footer
+const LINK_OUT_STATIONS = [
+  {
+    name: 'WNCW 88.7',
+    city: 'Spindale, NC',
+    siteUrl: 'https://www.wncw.org/listen-live'
+  },
+  {
+    name: 'WUTC 88.1',
+    city: 'Chattanooga, TN',
+    siteUrl: 'https://www.wutc.org/listen-to-wutc'
+  },
+  {
+    name: 'WDVX',
+    city: 'Knoxville, TN',
+    siteUrl: 'https://wdvx.com/listen/'
+  },
+  {
+    name: 'WPRB',
+    city: 'Princeton, NJ',
+    siteUrl: 'https://listen.wprb.com'
+  },
+  {
+    name: 'The Current',
+    city: 'Minneapolis, MN',
+    siteUrl: 'https://www.thecurrent.org/streams'
+  }
+];
+
+// ordered by frequency ascending, ties broken alphabetically by call letters
+const STATIONS = [...STATIONS_RAW].sort((a, b) => {
+  if(a.freq !== b.freq) return a.freq - b.freq;
+  return a.name.localeCompare(b.name);
+});
+
+const svgNS = "http://www.w3.org/2000/svg";
+let drumIndex = 0;
+const ITEM_SPACING = 92; // px between drum item centers
+
+function buildDrum(){
+  const track = document.getElementById('drumTrack');
+  STATIONS.forEach((st, i) => {
+    const el = document.createElement('div');
+    el.className = 'drum-item';
+    el.setAttribute('data-id', st.id);
+    el.setAttribute('data-index', i);
+    el.setAttribute('role', 'button');
+    el.setAttribute('tabindex', '0');
+    el.setAttribute('aria-label', `${st.name}, ${st.freq.toFixed(1)} FM`);
+    el.innerHTML = `<span class="call">${st.name.split(' ')[0]}</span><span class="freq">${st.freq.toFixed(1)}</span>`;
+    el.addEventListener('click', () => {
+      if(i === drumIndex){ selectStation(st.id, { play: true }); }
+      else { drumIndex = i; renderDrum(); selectStation(st.id); }
+    });
+    el.addEventListener('keydown', e => {
+      if(e.key === 'Enter' || e.key === ' '){
+        e.preventDefault();
+        drumIndex = i; renderDrum(); selectStation(st.id);
+      }
+    });
+    track.appendChild(el);
+  });
+}
+
+function renderDrum(){
+  const items = document.querySelectorAll('.drum-item');
+  items.forEach((el, i) => {
+    const offset = i - drumIndex;
+    const dist = Math.abs(offset);
+    el.classList.toggle('active', dist === 0);
+    if(dist > 3){
+      el.style.opacity = '0';
+      el.style.transform = `translate(${offset * ITEM_SPACING * 0.6}px, -50%) scale(0.4)`;
+      el.style.pointerEvents = 'none';
+      return;
+    }
+    el.style.pointerEvents = 'auto';
+    const scale = dist === 0 ? 1 : (dist === 1 ? 0.72 : 0.55);
+    const opacity = dist === 0 ? 1 : (dist === 1 ? 0.55 : 0.25);
+    el.style.transform = `translate(${offset * ITEM_SPACING}px, -50%) scale(${scale})`;
+    el.style.opacity = opacity;
+  });
+}
+
+function moveDrumTo(id, andSelect){
+  const idx = STATIONS.findIndex(s => s.id === id);
+  if(idx === -1) return;
+  drumIndex = idx;
+  renderDrum();
+  if(andSelect) selectStation(id);
+}
+
+function buildGrid(){
+  const grid = document.getElementById('stationGrid');
+  STATIONS.forEach(st => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.setAttribute('data-id', st.id);
+    card.setAttribute('role', 'button');
+    card.setAttribute('tabindex', '0');
+    card.innerHTML = `
+      <div class="card-top">
+        <span class="c-freq">${st.freq.toFixed(1)}</span>
+        <span class="c-band">${st.band}</span>
+      </div>
+      <p class="c-name">${st.name}</p>
+      <p class="c-loc">${st.city}</p>
+      <p class="c-genre">${st.tags.join(' · ')}</p>
+      <div class="card-status" id="status-${st.id}">
+        <div class="dot-wave" aria-hidden="true">
+          <span></span><span></span><span></span><span></span><span></span>
+        </div>
+        <span class="status-label" id="statusLabel-${st.id}">select to tune</span>
+      </div>
+      <p class="card-track" id="track-${st.id}"></p>
+      <button class="card-play" id="play-${st.id}" aria-label="Play ${st.name}">
+        <svg id="icon-${st.id}" viewBox="0 0 16 16" fill="currentColor"><path d="M3 1.5v13l11-6.5z"/></svg>
+      </button>
+    `;
+    card.addEventListener('click', e => {
+      if(e.target.closest('.card-play')) return;
+      moveDrumTo(st.id, false);
+      selectStation(st.id);
+    });
+    card.addEventListener('keydown', e => {
+      if((e.key === 'Enter' || e.key === ' ') && !e.target.closest('.card-play')){
+        e.preventDefault();
+        moveDrumTo(st.id, false);
+        selectStation(st.id);
+      }
+    });
+    card.querySelector('.card-play').addEventListener('click', e => {
+      e.stopPropagation();
+      moveDrumTo(st.id, false);
+      selectStation(st.id);
+      togglePlay(st.id);
+    });
+    grid.appendChild(card);
+  });
+}
+
+let current = null;
+let isPlaying = false;
+const audioEl = document.getElementById('audioEl');
+
+function selectStation(id){
+  const st = STATIONS.find(s => s.id === id);
+  if(!st) return;
+  current = st;
+
+  document.getElementById('readoutName').textContent = `${st.name} · ${st.freq.toFixed(1)}`;
+  document.documentElement.style.setProperty('--needle', st.color);
+
+  document.querySelectorAll('.drum-item').forEach(el => {
+    el.classList.toggle('active', el.getAttribute('data-id') === id);
+  });
+  document.querySelectorAll('.card').forEach(c => {
+    c.classList.toggle('active', c.getAttribute('data-id') === id);
+  });
+
+  startNowPlayingPoll(st);
+}
+
+function setCardStatus(id, text, live){
+  const label = document.getElementById(`statusLabel-${id}`);
+  const statusRow = document.getElementById(`status-${id}`);
+  if(!label || !statusRow) return;
+  label.textContent = text;
+  statusRow.classList.toggle('live', !!live);
+  if(live){
+    startDotWave(id);
+  } else {
+    stopDotWave();
+  }
+}
+
+let dotWaveTimer = null;
+function startDotWave(id){
+  stopDotWave();
+  const statusRow = document.getElementById(`status-${id}`);
+  if(!statusRow) return;
+  const bars = statusRow.querySelectorAll('.dot-wave span');
+  dotWaveTimer = setInterval(() => {
+    bars.forEach(bar => {
+      bar.style.height = (3 + Math.random() * 7) + 'px';
+    });
+  }, 260);
+}
+function stopDotWave(){
+  if(dotWaveTimer){ clearInterval(dotWaveTimer); dotWaveTimer = null; }
+  document.querySelectorAll('.dot-wave span').forEach(bar => { bar.style.height = '3px'; });
+}
+
+function setCardIcon(id, state){
+  const icon = document.getElementById(`icon-${id}`);
+  if(!icon) return;
+  if(state === 'playing'){
+    icon.innerHTML = '<rect x="2" y="1.5" width="4" height="13"/><rect x="10" y="1.5" width="4" height="13"/>';
+  } else {
+    icon.innerHTML = '<path d="M3 1.5v13l11-6.5z"/>';
+  }
+}
+
+function stopPlayback(){
+  audioEl.pause();
+  audioEl.removeAttribute('data-station');
+  audioEl.src = '';
+  if(isPlaying && current){
+    setCardIcon(current.id, 'idle');
+  }
+  isPlaying = false;
+  stopDotWave();
+}
+
+function togglePlay(id){
+  const st = STATIONS.find(s => s.id === id);
+  if(!st) return;
+
+  const wasPlayingThis = isPlaying && current && current.id === id && audioEl.getAttribute('data-station') === id;
+
+  if(wasPlayingThis){
+    stopPlayback();
+    setCardStatus(id, 'paused', false);
+    return;
+  }
+
+  // stop any other station first
+  if(isPlaying) stopPlayback();
+
+  if(!st.streamUrl){
+    window.open(st.siteUrl, '_blank', 'noopener');
+    setCardStatus(id, "no embedded stream — opened site", false);
+    return;
+  }
+
+  setCardIcon(id, 'idle');
+  setCardStatus(id, 'connecting…', false);
+  audioEl.src = st.streamUrl;
+  audioEl.setAttribute('data-station', id);
+  audioEl.play().then(() => {
+    if(audioEl.getAttribute('data-station') !== id) return; // superseded by another selection
+    isPlaying = true;
+    setCardIcon(id, 'playing');
+    setCardStatus(id, 'live', true);
+  }).catch(() => {
+    if(audioEl.getAttribute('data-station') !== id) return;
+    setCardIcon(id, 'idle');
+    setCardStatus(id, "couldn't connect — try station's site", false);
+  });
+}
+
+audioEl.addEventListener('waiting', () => {
+  const id = audioEl.getAttribute('data-station');
+  if(id) setCardStatus(id, 'buffering…', false);
+});
+audioEl.addEventListener('stalled', () => {
+  const id = audioEl.getAttribute('data-station');
+  if(!id) return;
+  setCardStatus(id, 'stream interrupted — try again', false);
+  setCardIcon(id, 'idle');
+  isPlaying = false;
+  stopDotWave();
+});
+audioEl.addEventListener('error', () => {
+  const id = audioEl.getAttribute('data-station');
+  if(!id) return; // no active station — stale teardown event, ignore
+  setCardStatus(id, "couldn't connect — try station's site", false);
+  setCardIcon(id, 'idle');
+  isPlaying = false;
+  stopDotWave();
+});
+
+/* ---------- Now-playing metadata ----------
+   Each station's streaming host may or may not expose machine-readable
+   track info, and even when it does, CORS policy on their server decides
+   whether a browser fetch is allowed to read it. We attempt a fetch per
+   station's known endpoint shape; on any failure (network, CORS, parse)
+   we fail silently and leave the track line hidden rather than show
+   stale or fabricated data. */
+let nowPlayingTimer = null;
+
+function startNowPlayingPoll(st){
+  stopNowPlayingPoll();
+  if(!st.nowPlayingUrl) return;
+  fetchNowPlaying(st);
+  nowPlayingTimer = setInterval(() => fetchNowPlaying(st), 30000);
+}
+function stopNowPlayingPoll(){
+  if(nowPlayingTimer){ clearInterval(nowPlayingTimer); nowPlayingTimer = null; }
+}
+
+async function fetchNowPlaying(st){
+  try{
+    const res = await fetch(st.nowPlayingUrl, { cache: 'no-store' });
+    if(!res.ok) throw new Error('bad response');
+    const data = await res.json();
+    const track = st.parseNowPlaying ? st.parseNowPlaying(data) : null;
+    const trackEl = document.getElementById(`track-${st.id}`);
+    if(track && trackEl){
+      trackEl.textContent = track;
+      trackEl.classList.add('show');
+    }
+  } catch(err){
+    // silent fallback — likely CORS, network, or shape mismatch
+  }
+}
+
+function parseIcecastJson(data){
+  try{
+    const src = data.icestats && data.icestats.source;
+    const entry = Array.isArray(src) ? src[0] : src;
+    const title = entry && (entry.title || entry.yp_currently_playing);
+    return title ? title : null;
+  } catch(e){ return null; }
+}
+
+document.getElementById('drumPrev').addEventListener('click', () => {
+  const idx = (drumIndex - 1 + STATIONS.length) % STATIONS.length;
+  drumIndex = idx;
+  renderDrum();
+  selectStation(STATIONS[idx].id);
+});
+document.getElementById('drumNext').addEventListener('click', () => {
+  const idx = (drumIndex + 1) % STATIONS.length;
+  drumIndex = idx;
+  renderDrum();
+  selectStation(STATIONS[idx].id);
+});
+
+function buildLinkouts(){
+  const row = document.getElementById('linkoutRow');
+  if(!LINK_OUT_STATIONS.length){ row.style.display = 'none'; return; }
+  const links = LINK_OUT_STATIONS.map(s =>
+    `<a href="${s.siteUrl}" target="_blank" rel="noopener">${s.name} · ${s.city} ↗</a>`
+  ).join('');
+  row.innerHTML = `<span class="lo-label">no embeddable stream</span>${links}`;
+}
+
+document.getElementById('gridCount').textContent =
+  String(STATIONS.length).padStart(2, '0') + ' / community & public radio';
+
+buildLinkouts();
+buildDrum();
+buildGrid();
+drumIndex = STATIONS.findIndex(s => s.id === 'kzsc');
+renderDrum();
+selectStation('kzsc');
+</script>
+
+</body>
+</html>
