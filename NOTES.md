@@ -1,26 +1,54 @@
 # The Dial — backlog / notes
 
-## Current presets (live in index.html today)
-- OhmRadio 96.3 — Charleston, SC (Live365, embedded, working)
-- WREK 91.1 — Atlanta, GA (Icecast, embedded, working, now-playing wired)
-- KZSC 88.1 — Santa Cruz, CA (Icecast/radioca.st, embedded, working, now-playing wired)
-- KEXP 90.3 — Seattle, WA (StreamGuys AAC, embedded, now-playing via official api.kexp.org/v2/plays/ — well-documented, high confidence)
-- FIP — Paris, France (Radio France Icecast, embedded, now-playing via radiofrance.fr/fip/api/live — endpoint confirmed real, but exact JSON shape not fully verified, parser written defensively with silent fallback)
+## Current streaming stations (live in index.html — 15 total)
+- OhmRadio 96.3 — Charleston, SC (Live365)
+- WNCW 88.7 — Spindale, NC (audiocdn.com edge AAC — resurrected from footer after https stream found)
+- KZSC 88.1 — Santa Cruz, CA (Icecast/radioca.st, now-playing attempted)
+- WREK 91.1 — Atlanta, GA (Icecast, now-playing confirmed working)
+- WFMU 91.1 — Jersey City, NJ (Icecast, now-playing attempted)
+- WWOZ 90.7 — New Orleans, LA (WWOZ.org redirect → StreamGuys)
+- WEVL 89.9 — Memphis, TN (StreamGuys)
+- WRFG 89.3 — Atlanta, GA (Radio.co)
+- KUTX 98.9 — Austin, TX (KUT/StreamGuys)
+- KEXP 90.3 — Seattle, WA (StreamGuys AAC, now-playing confirmed working via api.kexp.org)
+- Studio One — Des Moines, IA (Iowa Public Radio, officially published URL)
+- The Current 89.3 — Minneapolis, MN (publicradio.org — found via deroverda directory, MPR's own streams page only shows a JS player)
+- FIP — Paris, France (Radio France Icecast, now-playing attempted, exact JSON shape unconfirmed)
+- KCRW Eclectic24 — Santa Monica, CA (streams.kcrw.com)
+- Soho Radio — London, UK (Online-only, no FM frequency)
 
-## Link-out only (footer, no embeddable stream)
-- WNCW 88.7 — Spindale, NC (NPR Brightspot CMS, no public stream URL found)
-- WUTC 88.1 — Chattanooga, TN (same NPR Brightspot CMS limitation)
+## Footer link-outs (no embeddable stream)
+- WUTC 88.1 — Chattanooga, TN (NPR Brightspot CMS)
+- WDVX — Knoxville, TN (StreamGuys, URL buried in JS player)
+- WPRB — Princeton, NJ (Radio Rethink JS player)
+- WXYC 89.3 — Chapel Hill, NC (http-only ibiblio Icecast, mixed-content blocked)
+- WTUL 91.5 — New Orleans, LA (http-only raw IP Icecast, mixed-content blocked)
+- WUOG 90.5 — Athens, GA (http-only Icecast, mixed-content blocked)
 
-These moved out of the main playable grid and into a small text link row in the
-footer as of the 2026-06-30 stream-only pass. Permanent, not a bug — NPR's player
-stack doesn't expose a plain embeddable URL outside their own site.
+Note: WNCW previously had no public stream; an https CDN URL was found via the
+deroverda/recommended-radio-streams directory and it was resurrected into the grid.
+WUTC remains footer-only — its NPR Brightspot limitation is permanent.
 
 ## Not a fit for this project
-- **Tryzub Radio** (tryzubradio.com) — checked 2026-06-30. This is not a music
-  station with a stream; "Listen Now" links out to an X (Twitter) Space for
-  discussion/talk content, no audio CDN or Icecast backend at all. Doesn't fit
-  The Dial's stream-only model. Logged here in case Benjamin wants to track it
-  for something else later, but not a candidate for this page.
+- **Tryzub Radio** — Not a music station; "Listen Now" links to an X/Twitter Space.
+- **Roll FM** (Finland) — Seasonal broadcaster (~2-month runs), http-only stream.
+- **Clyde 2** (Scotland) — Rebranded as "Greatest Hits Radio Glasgow & West", now a
+  commercial Bauer Media oldies station. Doesn't fit the roster ethos.
+- **Boost Radio** — Commercial pop/hip-hop/EDM, not a fit.
+- **SomaFM** — Commercial-free internet network with 30+ channels; intentionally
+  skipped — it's a network, not a station. Worth exploring personally.
+
+## Stream URL unconfirmed — devtools needed
+These have real public streams but URLs are buried in JS players:
+- **RTRFM 92.1** — Perth, Australia. Independent, 400+ volunteers, 50+ programs since
+  1977. Strong fit; just needs a URL. Homepage: rtrfm.com.au
+- **FBi Radio 94.5** — Sydney, Australia. Independent non-profit, 50% Australian music.
+  Same situation. Homepage: fbi.radio
+
+## Useful reference
+The deroverda/recommended-radio-streams GitHub directory is the best single resource
+for verified stream URLs found so far — confirmed The Current, KCRW, Soho Radio, WFMU,
+WXYC, WNCW URLs in one pass. Worth checking first before any future station research.
 
 ## Candidate stations to add (not yet in the page)
 Stream verification pass completed 2026-06-30 — all 9 remaining backlog
