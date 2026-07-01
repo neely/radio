@@ -376,7 +376,7 @@
 <div class="dial-shell">
   <div class="dial-inner">
     <div class="dial-readout">
-      <span>five stations</span>
+      <span id="stationCount">15 stations</span>
       <span class="now-tuned">tuned to <b id="readoutName">—</b></span>
     </div>
     <div class="drum">
@@ -410,7 +410,7 @@
 
   <footer>
     <span>Built for one page, not for sale. Streams belong to their stations.</span>
-    <span>Source on <a href="#" id="ghLink">GitHub</a></span>
+    <span>Source on <a href="https://github.com/neely/radio" id="ghLink" target="_blank" rel="noopener">GitHub</a></span>
   </footer>
 
 </div>
@@ -1014,6 +1014,8 @@ function buildLinkouts(){
 
 document.getElementById('gridCount').textContent =
   String(STATIONS.length).padStart(2, '0') + ' / community & public radio';
+document.getElementById('stationCount').textContent =
+  STATIONS.length + ' stations';
 
 buildLinkouts();
 buildDrum();
