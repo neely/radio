@@ -78,4 +78,26 @@ been researched yet, or just hasn't made my personal cut. All three are fine.
 ## Donating
 
 These stations are listener-supported. If you discover something you love here, please
-consider donating directly to the station — links coming to each card in a future pass.
+consider donating directly.
+
+| Station | City | Donate |
+|---------|------|--------|
+| KZSC | Santa Cruz, CA | [Donate](https://kzsc.org/donate/) |
+| WNCW | Spindale, NC | [Donate](https://www.wncw.org/support) |
+| The Current | Minneapolis, MN | [Donate](https://www.thecurrent.org/waystogive) |
+| WRFG | Atlanta, GA | [Donate](https://wrfg.org/donate/) |
+| KCRW | Santa Monica, CA | [Donate](https://join.kcrw.com/) |
+| WEVL | Memphis, TN | [Donate](https://wevl.org/pledge) |
+| Studio One | Des Moines, IA | [Donate](https://www.studioone.org/support) |
+| KEXP | Seattle, WA | [Donate](https://www.kexp.org/donate/) |
+| WWOZ | New Orleans, LA | [Donate](https://www.wwoz.org/donate/) |
+| WFMU | Jersey City, NJ | [Donate](https://pledge.wfmu.org/donate?step=landing) |
+| WREK | Atlanta, GA | [Donate](https://wrekradio.bigcartel.com/product/donation) |
+| Ohm Radio 96.3 | Charleston, SC | [Donate](https://www.ohmradio963.org/donate/) |
+| KUTX | Austin, TX | [Donate](https://kutx.org/donate/) |
+| FIP | Paris, France | — French public broadcasting, no listener-donation model |
+| Soho Radio | London, UK | — independent/commercial, no donate page found |
+
+Links verified directly against each station's own site. Same `donateUrl` field
+now lives in `index.html`'s station data — the on-card donate button is still
+pending (see [PLAN.md](PLAN.md)).
