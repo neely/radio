@@ -1,69 +1,80 @@
 # The Dial — Roadmap
 
-Sequenced plan. Each phase unblocks the next.
+Live at **radio.benneely.com** · Repo: github.com/neely/radio
 
 ---
 
 ## ✓ Phase 1 — Core page + tuner mechanic
-- Single-file HTML player with drum-style rotary tuner
-- Per-card play/pause with animated VU bars and live status
-- Now-playing metadata fetch where stations expose a public endpoint
+- Single-file HTML, drum-style rotary tuner, per-card play/pause with VU bars
+- Now-playing fetch for stations that expose a public endpoint (silent fallback on failure)
 - Footer link-out row for stations without embeddable streams
-- Station data: 13 streamable stations, 5 honorable-mention link-outs
 
-## ✓ Phase 2 — Stream verification across all candidates
-- Checked all 11 backlog stations for real, public, embeddable stream URLs
-- 8 confirmed and added to the page; 3 moved to footer link-outs
-- Documented research approach, stream URLs, and now-playing notes in NOTES.md
-- Bar established: no guessed or pattern-matched URLs — direct confirmation only
+## ✓ Phase 2 — Stream verification + roster build
+- Checked all candidate stations for real, public, https-embeddable stream URLs
+- Research reference: **github.com/deroverda/recommended-radio-streams** — invaluable
+  directory of verified stream URLs; found The Current, KCRW, Soho Radio, WNCW via this
+- Bar: direct confirmation only, no guessed or pattern-matched URLs
+- Mixed-content audit: upgraded http→https where possible (WFMU, WWOZ, WEVL, WNCW);
+  demoted permanently http-only stations to footer (WXYC, WTUL, WUOG)
+- **15 streaming stations** live; 6 footer link-outs; 2 unconfirmed (RTRFM, FBi Radio)
+
+### Stations to test (all confirmed playing as of last check, but verify on each device)
+| Station | Stream host | Notes |
+|---------|------------|-------|
+| OhmRadio 96.3 | Live365 | |
+| WNCW 88.7 | audiocdn.com edge | Resurrected from footer |
+| KZSC 88.1 | radioca.st | |
+| WREK 91.1 | Icecast | Now-playing ✓ |
+| WFMU 91.1 | Icecast | https upgraded |
+| WWOZ 90.7 | WWOZ.org → StreamGuys | Redirect chain — watch this one |
+| WEVL 89.9 | StreamGuys | https upgraded |
+| WRFG 89.3 | Radio.co | |
+| KUTX 98.9 | KUT/StreamGuys | |
+| KEXP 90.3 | StreamGuys | Now-playing ✓ |
+| Studio One | Iowa PR | Officially published URL |
+| The Current 89.3 | publicradio.org | URL not on MPR's own page |
+| FIP | Radio France Icecast | Now-playing attempted, shape unconfirmed |
+| KCRW Eclectic24 | streams.kcrw.com | |
+| Soho Radio | doughunt.co.uk | Non-standard port 8010 |
 
 ## → Phase 3 — Logos + logo-derived accent colors *(next)*
 - Download each station's square favicon/app-icon into `icons/`
-- Self-hosted (not hotlinked) for durability
-- Eyeball a brand accent color per station from their real visual identity
-- Replace current hand-picked `color` field values with logo-grounded ones
-- Both tasks done in a single pass — same stations, same visual-identity research
-- Note: some stations may not have a clean single dominant color; manual eyeball
-  is more reliable than programmatic extraction at this roster size
+- Self-hosted, not hotlinked
+- Eyeball a brand accent color per station; replace hand-picked `color` field values
+- Do in a single pass — same visual-identity research for both tasks
+- Note: some logos may not have a clean single dominant color; manual eyeball preferred
+  over programmatic extraction at this roster size
 
-## Phase 4 — Real-device testing
-- Push to radio.benneely.com via GitHub (Cloudflare-handled)
-- Test all 13 streams from phone
-- Watch for: mixed-content blocking on `http://` stream URLs (WFMU, WXYC, WWOZ,
-  WTUL, WUOG may be affected if the page is served over HTTPS)
-- Confirm now-playing appears for KEXP (high confidence), WREK/KZSC (medium),
-  WFMU/WXYC (unverified endpoint), FIP (endpoint real, shape unconfirmed)
-
-## Phase 5 — Donate links
+## Phase 4 — Donate links
 - Add `donateUrl` field per station in the data array
-- Small donate link/button per card (non-intrusive, below genre tags)
-- Must be in place before any wider public sharing of the page
-- Low-effort, no structural changes needed
+- Small, non-intrusive donate link per card
+- Required before any wider public sharing
+- Low structural impact — no layout changes needed
 
-## Phase 6 — Presets / library split
-- Revisit once the full roster is live and actually feels crowded in the drum
-- Current intent: top personal picks (at minimum OhmRadio, KEXP, FIP, WFMU)
-  become a "presets" tier; rest become a browsable library section
-- Reordering: a simple "add to presets" toggle preferred over drag-and-drop
-- Don't build this preemptively — wait until the UX problem is actually felt
+## Phase 5 — Responsive / layout pass
+- Mobile: drum tuner + card grid not rigorously tested at small widths (eyeballed only)
+- Desktop/"at work": more grid columns, wider drum
+- Done after logos + donate so card content shape is final before layout is tuned around it
 
-## Phase 7 — Responsive pass
-- Deliberate mobile-friendly layout pass (drum tuner + cards not rigorously
-  tested at small widths — eyeballed only)
-- Big-screen / "at work" layout consideration: more grid columns, wider drum
-- Done last so card content (logos, donate links) is final before layout is tuned
-- radio.benneely.com is the test target throughout
+## Phase 6 — Presets / library split *(if needed)*
+- Revisit once 15+ stations actually feels crowded in the drum
+- Intent: OhmRadio, KEXP, FIP, WFMU as "presets" tier; rest as browsable library
+- Simple "add to presets" toggle preferred over drag-and-drop
+- Don't build preemptively — wait until the UX problem is actually felt
 
 ---
 
-## Deferred / won't do (for now)
+## Stations with unconfirmed streams (need devtools to find URL)
+- **RTRFM 92.1** — Perth, Australia. Independent, 400+ volunteers since 1977. Strong fit.
+- **FBi Radio 94.5** — Sydney, Australia. Independent, 50% Australian music. Strong fit.
 
-- **Now-playing for WTUL/WUOG via Spinitron**: their API requires an auth key
-  issued by each station, out of scope. Spinitron's public iframe widget is an
-  option but needs its own design work to fit the card layout.
-- **WDVX, WPRB, The Current**: stream URL not publicly findable without browser
-  devtools inspection on a live session. Not pursuing further — they live as
-  footer link-outs. Would revisit only if someone provides a verified stream URL.
-- **Drag-to-reorder**: explicitly de-scoped. Not worth the complexity at this stage.
-- **Tryzub Radio**: not a music station — it's an X/Twitter Space discussion format,
-  no audio stream at all. Not a fit for this project.
+If either stream URL surfaces (someone with devtools inspects their player), add via the
+same pattern as the rest of the roster.
+
+## Deferred / won't do
+- **WTUL, WUOG, WXYC** — http-only Icecast servers, no TLS, mixed-content blocked on https
+  pages. Would need a Cloudflare Worker proxy to fix — out of scope for now.
+- **Now-playing for WTUL/WUOG** — Spinitron API requires an auth key from the station.
+- **SomaFM** — Network of 30+ channels, intentionally skipped. Worth exploring personally.
+- **Drag-to-reorder** — De-scoped. Simple toggle if reordering is ever needed.
+- **Roll FM, Clyde 2, Boost Radio** — Not a fit (seasonal/commercial/format mismatch).
