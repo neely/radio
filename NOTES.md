@@ -162,9 +162,13 @@ for the existing roster:
   lack one clean dominant color, so this may need a manual fallback anyway).
   Natural to do in the same pass as the Logos work above, since both involve
   looking closely at each station's actual visual identity.
-- **Donate links.** Before any public/GitHub release, each station card should get
-  a `donateUrl` field and a small donate link/button. Not wired in yet — just the
-  field name decided.
+- **Donate links.** Data done 2026-07-01 — `donateUrl` added to 13 of 15 stations,
+  each verified against the station's own site (not a mirror/aggregator) this
+  session. FIP and Soho Radio intentionally have no `donateUrl`: FIP is French
+  public broadcasting funded via license fee/Radio France, no listener-donation
+  model exists; Soho Radio is independent/commercial-adjacent with a merch store
+  but no donate page found. UI (link/button on the card) still not wired in —
+  that's the remaining piece before this phase is closed out.
 - **Responsive design pass.** Before public release: a deliberate mobile-friendly
   layout pass (drum tuner + cards eyeballed but not rigorously tested at small
   widths) and a separate "at work / big screen" layout consideration — likely more
