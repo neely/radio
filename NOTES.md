@@ -80,6 +80,11 @@ pending the logo/color pass.
 - **WUOG** — Athens, GA. `http://stream.wuog.org:8000/stream` (explicitly
   published by the station itself as "a direct stream link" on their live-stream
   page). Also uses Spinitron — see now-playing note below.
+  Logo processed and banked (2026-07-02): circular badge, dark blue accent
+  #37436d (teal script wordmark is #57adc8). Not committed to icons/ or wired
+  into data — WUOG has no `id`/`color` field since it's footer-only. If it's
+  ever promoted to a full card (needs the http-only stream resolved first,
+  same mixed-content block as WXYC/WTUL), the processed asset is ready to go.
 - **WEVL** — Memphis, TN. `http://wevl.streamguys1.com/live` (StreamGuys-hosted,
   independently confirmed via a personal radio-streaming reference page, not
   guessed from the WDVX pattern below — this one's slug is directly verified).
