@@ -714,6 +714,23 @@ const svgNS = "http://www.w3.org/2000/svg";
 let drumIndex = 0;
 const ITEM_SPACING = 92; // px between drum item centers
 
+// Switch the drum to a new index. If a station was already playing, stop it
+// and start the new one — browsing while paused just updates the display.
+function navigateDrum(newIdx){
+  const wasPlaying = isPlaying;
+  const oldId = current ? current.id : null;
+  const newId = STATIONS[newIdx].id;
+
+  drumIndex = newIdx;
+  renderDrum();
+  selectStation(newId);
+
+  if(wasPlaying && oldId !== newId){
+    stopPlayback(oldId);
+    playStation(newId);
+  }
+}
+
 function buildDrum(){
   const track = document.getElementById('drumTrack');
   STATIONS.forEach((st, i) => {
@@ -726,13 +743,14 @@ function buildDrum(){
     el.setAttribute('aria-label', `${st.name}, ${st.freq ? st.freq.toFixed(1) + ' FM' : 'Online'}`);
     el.innerHTML = `<span class="call">${st.name.split(' ')[0]}</span><span class="freq">${st.freq ? st.freq.toFixed(1) : 'Online'}</span>`;
     el.addEventListener('click', () => {
-      if(i === drumIndex){ selectStation(st.id, { play: true }); }
-      else { drumIndex = i; renderDrum(); selectStation(st.id); }
+      if(i === drumIndex){ togglePlay(st.id); }
+      else { navigateDrum(i); }
     });
     el.addEventListener('keydown', e => {
       if(e.key === 'Enter' || e.key === ' '){
         e.preventDefault();
-        drumIndex = i; renderDrum(); selectStation(st.id);
+        if(i === drumIndex){ togglePlay(st.id); }
+        else { navigateDrum(i); }
       }
     });
     track.appendChild(el);
@@ -878,31 +896,21 @@ function setCardIcon(id, state){
   }
 }
 
-function stopPlayback(){
+function stopPlayback(idOverride){
+  const idToReset = idOverride || (current && current.id);
   audioEl.pause();
   audioEl.removeAttribute('data-station');
   audioEl.src = '';
-  if(isPlaying && current){
-    setCardIcon(current.id, 'idle');
+  if(isPlaying && idToReset){
+    setCardIcon(idToReset, 'idle');
   }
   isPlaying = false;
   stopDotWave();
 }
 
-function togglePlay(id){
+function playStation(id){
   const st = STATIONS.find(s => s.id === id);
   if(!st) return;
-
-  const wasPlayingThis = isPlaying && current && current.id === id && audioEl.getAttribute('data-station') === id;
-
-  if(wasPlayingThis){
-    stopPlayback();
-    setCardStatus(id, 'paused', false);
-    return;
-  }
-
-  // stop any other station first
-  if(isPlaying) stopPlayback();
 
   if(!st.streamUrl){
     window.open(st.siteUrl, '_blank', 'noopener');
@@ -924,6 +932,24 @@ function togglePlay(id){
     setCardIcon(id, 'idle');
     setCardStatus(id, "couldn't connect — try station's site", false);
   });
+}
+
+function togglePlay(id){
+  const st = STATIONS.find(s => s.id === id);
+  if(!st) return;
+
+  const wasPlayingThis = isPlaying && current && current.id === id && audioEl.getAttribute('data-station') === id;
+
+  if(wasPlayingThis){
+    stopPlayback();
+    setCardStatus(id, 'paused', false);
+    return;
+  }
+
+  // stop any other station first
+  if(isPlaying) stopPlayback();
+
+  playStation(id);
 }
 
 audioEl.addEventListener('waiting', () => {
@@ -992,16 +1018,10 @@ function parseIcecastJson(data){
 }
 
 document.getElementById('drumPrev').addEventListener('click', () => {
-  const idx = (drumIndex - 1 + STATIONS.length) % STATIONS.length;
-  drumIndex = idx;
-  renderDrum();
-  selectStation(STATIONS[idx].id);
+  navigateDrum((drumIndex - 1 + STATIONS.length) % STATIONS.length);
 });
 document.getElementById('drumNext').addEventListener('click', () => {
-  const idx = (drumIndex + 1) % STATIONS.length;
-  drumIndex = idx;
-  renderDrum();
-  selectStation(STATIONS[idx].id);
+  navigateDrum((drumIndex + 1) % STATIONS.length);
 });
 
 function buildLinkouts(){
