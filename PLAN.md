@@ -7,10 +7,9 @@ Live at **radio.benneely.com** · Repo: github.com/neely/radio
 ## Working conventions
 - **Keep README.md in sync.** When a phase here changes data that README surfaces
   (station roster, donate links, stack/structure), update README in the same pass —
-  don't let it drift into a stale mirror of index.html. (Note: the "Current stations"
-  table in README is already stale as of 2026-07-01 — duplicate WREK row, a few
-  footer-only stations shown as playable, missing WNCW/Studio One/KCRW/The
-  Current/Soho. Needs a refresh next time that section is touched.)
+  don't let it drift into a stale mirror of index.html. (The "Current stations" table
+  went stale twice before this rule stuck — flagged as a TODO on 2026-07-01, still
+  hadn't been fixed by 2026-07-03. Actually fixed now; keep it that way.)
 
 ---
 
