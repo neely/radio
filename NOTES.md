@@ -69,6 +69,9 @@ pending the logo/color pass.
 - **WXYC** — Chapel Hill, NC. `http://audio-mp3.ibiblio.org:8000/wxyc.mp3` (raw
   Icecast on ibiblio, confirmed live with 32 listeners at check time). First
   station in the world to webcast (1994).
+  Logo processed and banked (2026-07-02): circular badge (turntable photo
+  with a blue "WXYC 89.3" label), accent #424e69. Not committed to icons/ or
+  wired into data — same footer-only situation as WUOG/WTUL.
 - **KUTX** — Austin, TX. `https://streams.kut.org/4428_192.mp3?aw_0_1st.playerid=kutx-free`
   (officially published by KUT/KUTX, explicitly the current post-migration URL
   as of an April 2024 platform change — not a stale legacy link).
