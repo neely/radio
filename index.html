@@ -823,7 +823,7 @@ function buildGrid(){
     card.setAttribute('tabindex', '0');
     card.innerHTML = `
       <div class="logo-row">
-        <img class="card-logo" src="icons/${st.id}.png" alt="" loading="lazy">
+        <img class="card-logo" src="icons/${st.id}.png" alt="" loading="lazy" onerror="this.style.visibility='hidden'">
         <button class="card-play" id="play-${st.id}" aria-label="Play ${st.name}">
           <svg id="icon-${st.id}" viewBox="0 0 16 16" fill="currentColor"><path d="M3 1.5v13l11-6.5z"/></svg>
         </button>
@@ -945,11 +945,17 @@ function stopDotWave(){
 
 function setCardIcon(id, state){
   const icon = document.getElementById(`icon-${id}`);
+  const btn = document.getElementById(`play-${id}`);
   if(!icon) return;
   if(state === 'playing'){
     icon.innerHTML = '<rect x="2" y="1.5" width="4" height="13"/><rect x="10" y="1.5" width="4" height="13"/>';
   } else {
     icon.innerHTML = '<path d="M3 1.5v13l11-6.5z"/>';
+  }
+  if(btn){
+    const st = STATIONS.find(s => s.id === id);
+    const name = st ? st.name : id;
+    btn.setAttribute('aria-label', state === 'playing' ? `Pause ${name}` : `Play ${name}`);
   }
 }
 

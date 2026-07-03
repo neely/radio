@@ -19,24 +19,27 @@ reality.
 
 ## Current stations
 
-| Station | Freq | City | Stream |
-|---------|------|------|--------|
-| KZSC | 88.1 FM | Santa Cruz, CA | ✓ |
-| WUOG | 90.5 FM | Athens, GA | ✓ |
-| WREK | 91.1 FM | Atlanta, GA | ✓ |
-| WFMU | 91.1 FM | Jersey City, NJ | ✓ |
-| WTUL | 91.5 FM | New Orleans, LA | ✓ |
-| WEVL | 89.9 FM | Memphis, TN | ✓ |
-| WXYC | 89.3 FM | Chapel Hill, NC | ✓ |
-| WRFG | 89.3 FM | Atlanta, GA | ✓ |
-| WWOZ | 90.7 FM | New Orleans, LA | ✓ |
-| KUTX | 98.9 FM | Austin, TX | ✓ |
-| WREK | 91.1 FM | Atlanta, GA | ✓ |
-| KEXP | 90.3 FM | Seattle, WA | ✓ |
-| OhmRadio | 96.3 FM | Charleston, SC | ✓ |
-| FIP | 105.1 FM | Paris, France | ✓ |
+| Station | Freq | City |
+|---------|------|------|
+| KZSC | 88.1 FM | Santa Cruz, CA |
+| WNCW | 88.7 FM | Spindale, NC |
+| The Current | 89.3 FM | Minneapolis, MN |
+| WRFG | 89.3 FM | Atlanta, GA |
+| KCRW | 89.9 FM | Santa Monica, CA |
+| WEVL | 89.9 FM | Memphis, TN |
+| Studio One | 90.1 FM | Des Moines, IA |
+| KEXP | 90.3 FM | Seattle, WA |
+| WWOZ | 90.7 FM | New Orleans, LA |
+| WFMU | 91.1 FM | Jersey City, NJ |
+| WREK | 91.1 FM | Atlanta, GA |
+| Ohm Radio | 96.3 FM | Charleston, SC |
+| KUTX | 98.9 FM | Austin, TX |
+| FIP | 105.1 FM | Paris, France |
+| Soho Radio | Online | London, UK |
 
-Honorable mentions (no embeddable stream): WNCW, WUTC, WDVX, WPRB, The Current
+Footer-only (no embeddable stream, linked out instead): WUTC, WDVX, WPRB, WXYC, WTUL, WUOG.
+WXYC/WTUL/WUOG specifically are http-only streams blocked by mixed-content rules on https
+pages — see [PLAN.md](PLAN.md) for details.
 
 ## Stack
 
