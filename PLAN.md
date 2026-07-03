@@ -47,21 +47,45 @@ Live at **radio.benneely.com** · Repo: github.com/neely/radio
 | KCRW Eclectic24 | streams.kcrw.com | |
 | Soho Radio | doughunt.co.uk | Non-standard port 8010 |
 
-## → Phase 3 — Logos + logo-derived accent colors *(next)*
-- Download each station's square favicon/app-icon into `icons/`
-- Self-hosted, not hotlinked
-- Eyeball a brand accent color per station; replace hand-picked `color` field values
-- Do in a single pass — same visual-identity research for both tasks
-- Note: some logos may not have a clean single dominant color; manual eyeball preferred
-  over programmatic extraction at this roster size
+## ✓ Phase 3 — Logos + logo-derived accent colors
+- All 15 stations have real logos in `icons/` (128×128 PNG, self-hosted) and
+  colors sampled from actual logo pixels (no hand-picked/guessed hex values
+  remain in the data)
+- Actual method differed from the original plan below: Ben uploaded each
+  station's logo directly (Instagram profile photos worked best — square,
+  clean, high-res) rather than fetching favicons. Turned out favicon fetching
+  wasn't viable anyway — no tool available could pull image bytes from an
+  external site into the repo, only file uploads from Ben worked.
+- Processing pipeline: center-crop → circular alpha mask → resize to 128×128
+  → sample accent color from actual pixels (not eyeballed). Several logos
+  needed a manual pre-crop first when the badge didn't fill its source frame
+  (WTUL, WRFG's first pass, WEVL required a radial color scan to distinguish
+  true background from a small inset detail)
+- 3 stations (WUOG, WTUL, WXYC) have logos processed and banked in NOTES.md
+  but not committed — they're footer-only (see Deferred section below), no
+  `id`/`color` field to plug into yet
+- KZSC was swapped mid-phase to a more distinctive photo-based badge; WRFG
+  was redone once with a higher-res source
+- **Not done yet: wiring `icons/` into the actual card template.** The files
+  exist and `color` is real, but nothing on the page currently renders a
+  logo image — that's a separate small task, not yet scheduled
 
-## Phase 4 — Donate links
-- Add `donateUrl` field per station in the data array
-- Small, non-intrusive donate link per card
-- Required before any wider public sharing
-- Low structural impact — no layout changes needed
+## ✓ Phase 4 — Donate links
+- `donateUrl` added to 13 of 15 stations, verified against each station's own
+  site (not a mirror/aggregator)
+- FIP and Soho Radio intentionally have no `donateUrl` — FIP is French public
+  broadcasting (license-fee funded, no listener-donation model), Soho Radio
+  has a merch store but no donate page
+- Also added to README's Donating section
+- **Not done yet: the actual link/button on the card UI.** Same situation as
+  logos — data's real, nothing renders it yet
 
-## Phase 5 — Responsive / layout pass
+## Phase 5 — Responsive / layout pass *(next)*
+- Note: this phase's rationale ("card content shape is final") assumes logos
+  and donate links are actually rendering on the card — they're not yet (see
+  Phase 3/4 above, data's done but UI wiring is a separate open task). Worth
+  doing that wiring first, or at least deciding the card's final visual shape
+  with logos/donate included, before tuning layout around it.
 - Mobile: drum tuner + card grid not rigorously tested at small widths (eyeballed only)
 - Desktop/"at work": more grid columns, wider drum
 - Done after logos + donate so card content shape is final before layout is tuned around it

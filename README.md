@@ -49,7 +49,7 @@ Honorable mentions (no embeddable stream): WNCW, WUTC, WDVX, WPRB, The Current
 ```
 radio/
 ├── index.html    ← the whole page
-├── icons/        ← self-hosted station icons (in progress)
+├── icons/        ← self-hosted station icons (128×128 PNG, all 15 stations)
 ├── NOTES.md      ← working notes, stream research, backlog
 ├── PLAN.md       ← sequenced roadmap
 └── README.md     ← this file
@@ -59,12 +59,14 @@ radio/
 
 See [PLAN.md](PLAN.md) for the sequenced roadmap. High-level:
 
-1. ~~Stream verification across all candidate stations~~ ✓
-2. Logos + logo-derived accent colors per card
-3. GitHub push + real-device testing (you're here)
-4. Presets / library split as roster grows
-5. Donate links per station
-6. Responsive / mobile + big-screen layout pass
+1. ~~Core page + tuner mechanic~~ ✓
+2. ~~Stream verification across all candidate stations~~ ✓
+3. ~~Logos + logo-derived accent colors per card~~ ✓ (data done; on-card
+   rendering of the logo image is still an open task)
+4. ~~Donate links per station~~ ✓ (data done; on-card link/button is still
+   an open task)
+5. Responsive / mobile + big-screen layout pass (next)
+6. Presets / library split, if the roster ever feels crowded in the drum
 
 ## Philosophy
 
