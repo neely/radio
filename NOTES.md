@@ -77,6 +77,11 @@ pending the logo/color pass.
 - **WTUL** — New Orleans, LA. `http://129.81.255.83:8000/stream` (raw IP-based
   Icecast/Shoutcast, published directly on the station's own stream page as an
   m3u link). Uses Spinitron for playlists — see now-playing note below.
+  Logo processed and banked (2026-07-02): circular badge (blue triangle
+  pattern), accent #3f87f6. Not committed to icons/ or wired into data —
+  same footer-only situation as WUOG. Note: the source image needed a manual
+  tight re-crop first — the badge only occupied part of the uploaded square,
+  with stray "W"/text fragments bleeding into the rest of the frame.
 - **WUOG** — Athens, GA. `http://stream.wuog.org:8000/stream` (explicitly
   published by the station itself as "a direct stream link" on their live-stream
   page). Also uses Spinitron — see now-playing note below.
