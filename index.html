@@ -392,10 +392,43 @@
     *{ transition:none !important; }
   }
 
-  @media (max-width:560px){
-    .now-top{ flex-direction:column; }
-    .now-freq{ text-align:left; }
-    .open-native{ margin-left:0; width:100%; }
+  /* ---------- Responsive: mobile (≤ 540px) ---------- */
+  @media (max-width:540px){
+    /* Tighten page-level wrapper */
+    .wrap{ padding:0 14px 80px; }
+
+    /* Header — less top breathing room */
+    header{ padding:20px 14px 14px; }
+    .subhead{ font-size:0.9rem; }
+
+    /* Dial-shell — slightly less inner pad */
+    .dial-inner{ padding:0 14px 10px; }
+
+    /* Readout: truncate long station names gracefully */
+    .dial-readout{ font-size:0.68rem; }
+    .dial-readout .now-tuned{ font-size:0.72rem; max-width:55%; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+    /* Grid: single column, tighter gap */
+    .grid{
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    /* Grid heading: less top margin */
+    .grid-heading{ margin:28px 0 12px; }
+
+    /* Footer: stack vertically */
+    footer{ flex-direction:column; gap:6px; }
+
+    /* Link-out row: smaller text is fine here */
+    .linkout-row{ font-size:0.74rem; }
+  }
+
+  /* ---------- Responsive: mid (541px – 720px, 2-column zone) ---------- */
+  @media (min-width:541px) and (max-width:720px){
+    .grid{
+      grid-template-columns: repeat(2, 1fr);
+    }
   }
 </style>
 </head>
