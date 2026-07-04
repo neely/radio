@@ -103,3 +103,19 @@ consider donating directly.
 
 Links verified directly against each station's own site. Same `donateUrl` field
 lives in `index.html`'s station data and is wired into each card.
+
+## How this was built
+
+The Dial was built entirely on a phone, through Claude, without ever opening a laptop.
+
+The starting point was a list of favorite local and regional radio stations. From there the idea took shape in conversation — a rotary drum tuner, real verified stream URLs only, self-hosted logos, pixel-sampled accent colors. Each phase was scoped, built, tested, and committed before moving to the next.
+
+The workflow throughout:
+
+- **Claude read and wrote the repo directly** via a fine-grained GitHub PAT scoped to this repo's contents only. No code was copied and pasted — commits went straight from the conversation to GitHub.
+- **Cloudflare Pages was already pointed at the subdomain** before the first line of code, so every push was immediately testable at radio.benneely.com from the same phone being used to build it.
+- **Logos came from screenshots** — station Instagram profile photos, app icons, whatever was cleanest. Pasted into chat, processed by Claude (center-crop → circular mask → 128×128px → pixel-sampled accent color), committed to `icons/`.
+- **Stream URLs were never guessed** — each one was either found via [deroverda/recommended-radio-streams](https://github.com/deroverda/recommended-radio-streams), extracted from a station's own page, or confirmed live before being added. Stations without a verifiable public URL went to the footer.
+- **Testing happened on the actual device** — the same phone used to build it was used to test it, which surfaced real mobile issues (drum arrow tap targets, card scroll behavior on navigation) that would have been invisible on a desktop.
+
+This fits the pattern described in the [App Patterns Field Guide](https://neely.github.io/patterns/) — specifically a read-only variant of Pattern 4 (GitHub as database, fine-grained PAT-gated write, Cloudflare Pages host), with no write path from the browser at all. The repo is the product; the HTML file is the entire app.
