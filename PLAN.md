@@ -101,10 +101,16 @@ Live at **radio.benneely.com** · Repo: github.com/neely/radio
   (blends toward paper); the other 12 already-bright colors pass through
   untouched. Verified against all 15 real colors before shipping.
 
-## Phase 5 — Responsive / layout pass *(next)*
-- Mobile: drum tuner + card grid not rigorously tested at small widths (eyeballed only)
-- Desktop/"at work": more grid columns, wider drum
-- Done after logos + donate so card content shape is final before layout is tuned around it
+## ✓ Phase 5 — Responsive / layout pass (2026-07-03)
+- Replaced stale dead-class media query (now-top/open-native, leftover from
+  an earlier iteration) with real rules keyed to actual class names in the page
+- ≤40px: tighter padding on wrap/header/dial-inner, single-column grid (explicit
+  1fr, not relying on auto-fill alone), stacked footer, truncated dial readout
+  for long station names (text-overflow:ellipsis on .now-tuned), smaller subhead
+- 541–720px: explicit repeat(2,1fr) grid — pins 2-column behavior in the zone
+  where auto-fill would otherwise float between 1 and 2 unpredictably
+- Desktop: no changes — auto-fill minmax(260px,1fr) + 920px max-width already
+  produces 3-column at typical desktop widths naturally
 
 ## Phase 6 — Presets / library split *(if needed)*
 - Revisit once 15+ stations actually feels crowded in the drum

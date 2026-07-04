@@ -189,6 +189,17 @@ for the existing roster:
   layout. Deliberately sequenced *after* logos/now-playing settle, so the card
   content shape is final before tuning layout around it.
 
+## Unused station data fields (intentional, not bugs)
+Two fields exist on every station object but are not rendered in the current UI:
+- **eyebrow** — short tagline (e.g. 'Freeform since 1958', 'Listener-powered').
+  Good copy; held back because the card is already information-dense. Natural
+  candidate for a detail panel or tooltip if one is ever added.
+- **desc** — one- or two-sentence description of the station. Same situation.
+  Would suit a hover/expand treatment or a station detail modal. Not worth adding
+  to the main card grid without a clear UX reason.
+
+Neither field is dead weight — they're ready if the design evolves.
+
 ## Known permanent limitations (not bugs)
 - WNCW and WUTC cannot be embedded — NPR's Brightspot CMS doesn't expose a public
   stream URL outside its own JS player. They live as small text links in the

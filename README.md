@@ -44,7 +44,7 @@ pages — see [PLAN.md](PLAN.md) for details.
 ## Stack
 
 - Single HTML file — no framework, no bundler, no dependencies beyond Google Fonts
-- Vanilla JS, ~850 lines including all station data
+- Vanilla JS, ~1150 lines including all station data
 - Hosted on GitHub Pages / Cloudflare
 
 ## Structure
@@ -64,11 +64,9 @@ See [PLAN.md](PLAN.md) for the sequenced roadmap. High-level:
 
 1. ~~Core page + tuner mechanic~~ ✓
 2. ~~Stream verification across all candidate stations~~ ✓
-3. ~~Logos + logo-derived accent colors per card~~ ✓ (data done; on-card
-   rendering of the logo image is still an open task)
-4. ~~Donate links per station~~ ✓ (data done; on-card link/button is still
-   an open task)
-5. Responsive / mobile + big-screen layout pass (next)
+3. ~~Logos + logo-derived accent colors per card~~ ✓
+4. ~~Donate links per station~~ ✓
+5. ~~Responsive / mobile layout pass~~ ✓
 6. Presets / library split, if the roster ever feels crowded in the drum
 
 ## Philosophy
@@ -104,5 +102,4 @@ consider donating directly.
 | Soho Radio | London, UK | — independent/commercial, no donate page found |
 
 Links verified directly against each station's own site. Same `donateUrl` field
-now lives in `index.html`'s station data — the on-card donate button is still
-pending (see [PLAN.md](PLAN.md)).
+lives in `index.html`'s station data and is wired into each card.

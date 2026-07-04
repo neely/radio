@@ -856,7 +856,7 @@ function buildGrid(){
     card.setAttribute('tabindex', '0');
     card.innerHTML = `
       <div class="logo-row">
-        <img class="card-logo" src="icons/${st.id}.png" alt="" loading="lazy" onerror="this.style.visibility='hidden'">
+        <img class="card-logo" src="icons/${st.id}.png" alt="" loading="lazy" onerror="this.style.display='none'">
         <button class="card-play" id="play-${st.id}" aria-label="Play ${st.name}">
           <svg id="icon-${st.id}" viewBox="0 0 16 16" fill="currentColor"><path d="M3 1.5v13l11-6.5z"/></svg>
         </button>
@@ -1137,7 +1137,7 @@ document.getElementById('stationCount').textContent =
 buildLinkouts();
 buildDrum();
 buildGrid();
-drumIndex = STATIONS.findIndex(s => s.id === 'kzsc');
+drumIndex = Math.max(0, STATIONS.findIndex(s => s.id === 'kzsc'));
 renderDrum();
 selectStation('kzsc');
 </script>
