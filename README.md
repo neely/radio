@@ -76,7 +76,7 @@ that way even as the list grows. The stations here aren't a comprehensive direct
 they're a personal shortlist that happens to be public.
 
 If a station you love isn't here: it either doesn't have a public stream URL, hasn't
-been researched yet, or just hasn't made my personal cut. All three are fine.
+been researched yet, or just hasn't made my personal cut. All three are fine. If you want to suggest a station, do a feature request (I have some still to add, and some may fall away over time, but would lovr suggestions).
 
 ## Donating
 
@@ -106,15 +106,15 @@ lives in `index.html`'s station data and is wired into each card.
 
 ## How this was built
 
-The Dial was built entirely on a phone, through Claude (Sonnet 4.6 and Claude 5 medium effort, on the free tier — which meant the occasional 5-hour token reset, but also meant working on it whenever, in whatever size chunks made sense), without ever opening a laptop.
+The Dial was built entirely on a phone, through Claude (Sonnet 4.6 low effort and Sonnet 5 medium effort, on the free tier — which meant the occasional 5-hour token reset, but also meant working on it whenever, in whatever size chunks made sense), without ever opening a laptop.
 
-The starting point was a list of favorite local and regional radio stations. From there the idea took shape in conversation — a rotary drum tuner, real verified stream URLs only, self-hosted logos, pixel-sampled accent colors. Each phase was scoped, built, tested, and committed before moving to the next.
+The initial inspiration was a post on Reddit sharing an [aggregated online radio player](https://pranav6617-sys.github.io/nangupungu/). I love radio progranmed by real DJs, so the starting point for me was a list of favorite local and regional radio stations. From there the idea took shape in conversation — a rotary drum tuner, real verified stream URLs only, self-hosted logos, pixel-sampled accent colors. Each phase was scoped, built, tested, and committed before moving to the next.
 
 The workflow throughout:
 
 - **Claude read and wrote the repo directly** via a fine-grained GitHub PAT scoped to this repo's contents only. No code was copied and pasted — commits went straight from the conversation to GitHub.
 - **Cloudflare Pages was already pointed at the subdomain** before the first line of code, so every push was immediately testable at radio.benneely.com from the same phone being used to build it.
-- **Logos came from screenshots** — station Instagram profile photos, app icons, whatever was cleanest. Pasted into chat, processed by Claude (center-crop → circular mask → 128×128px → pixel-sampled accent color), committed to `icons/`.
+- **Logos came from screenshots** — station Instagram profile photos, app icons, whatever was cleanest. Pasted into chat, processed by Claude (center-crop → circular mask → 128×128px → pixel-sampled accent color), committed to `icons/`. Claudr wasnt able to get these and at first it seemed like a chore where I would need to use my labtop to find them, eyedropper to identify the accent, clean them and push to repo... but then I realized I could just screenshot and paste them directly in chat, describe the accent color ("use the bright orange"), and let Claude clean and push. Likely a major use of tokens. 
 - **Stream URLs were never guessed** — each one was either found via [deroverda/recommended-radio-streams](https://github.com/deroverda/recommended-radio-streams), extracted from a station's own page, or confirmed live before being added. Stations without a verifiable public URL went to the footer.
 - **Testing happened on the actual device** — the same phone used to build it was used to test it, which surfaced real mobile issues (drum arrow tap targets, card scroll behavior on navigation) that would have been invisible on a desktop.
 
