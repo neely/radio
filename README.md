@@ -106,7 +106,7 @@ lives in `index.html`'s station data and is wired into each card.
 
 ## How this was built
 
-The Dial was built entirely on a phone, through Claude, without ever opening a laptop.
+The Dial was built entirely on a phone, through Claude (Sonnet 4.6 and Claude 5 medium effort, on the free tier — which meant the occasional 5-hour token reset, but also meant working on it whenever, in whatever size chunks made sense), without ever opening a laptop.
 
 The starting point was a list of favorite local and regional radio stations. From there the idea took shape in conversation — a rotary drum tuner, real verified stream URLs only, self-hosted logos, pixel-sampled accent colors. Each phase was scoped, built, tested, and committed before moving to the next.
 
@@ -119,3 +119,16 @@ The workflow throughout:
 - **Testing happened on the actual device** — the same phone used to build it was used to test it, which surfaced real mobile issues (drum arrow tap targets, card scroll behavior on navigation) that would have been invisible on a desktop.
 
 This fits the pattern described in the [App Patterns Field Guide](https://neely.github.io/patterns/) — specifically a read-only variant of Pattern 4 (GitHub as database, fine-grained PAT-gated write, Cloudflare Pages host), with no write path from the browser at all. The repo is the product; the HTML file is the entire app.
+
+## Contributing
+
+Found a broken stream? Know a station that belongs here? Both are welcome:
+
+- **Bug reports** (broken streams, layout issues, anything broken) → [open an issue](https://github.com/neely/radio/issues)
+- **Station suggestions** → [open a feature request](https://github.com/neely/radio/issues/new) with the station name, city, and a link to their stream or site
+
+The bar for new stations is the same as the existing roster: a real, public, https-embeddable stream URL, and a format that fits — community, college, independent, public radio.
+
+## License
+
+[MIT](LICENSE) — the code is yours. Streams and station logos belong to their respective stations.
