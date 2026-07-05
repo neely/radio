@@ -213,3 +213,17 @@ Neither field is dead weight — they're ready if the design evolves.
 - The "browse by tuning" interaction (drum scroll instead of e.g. search/filter) is
   intentional even as the station count grows — flagged by Benjamin as a feature,
   not a discoverability bug, at least for now.
+
+## Future station candidates (backlog)
+
+**Hip hop** — mid-90s mixtape feel
+- WBLS 107.5 (NYC) — legacy hip hop/R&B, verify https stream
+- KDAY 93.5 (LA) — classic hip hop format, verify https stream
+
+**Latino**
+- Charleston 95.5 — local first choice, need to confirm embeddable stream URL
+- Fallback: Radio Latina or a Univision affiliate with a clean public stream
+
+**Reggae**
+- Irie FM (Kingston, Jamaica) — the obvious pick, been broadcasting since the 90s
+- Verify stream URL; would be the only international-origin station on the roster
