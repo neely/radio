@@ -214,16 +214,30 @@ Neither field is dead weight — they're ready if the design evolves.
   intentional even as the station count grows — flagged by Benjamin as a feature,
   not a discoverability bug, at least for now.
 
-## Future station candidates (backlog)
+## Future station candidates (backlog) — research update 2026-07-25
 
-**Hip hop** — mid-90s mixtape feel
-- WBLS 107.5 (NYC) — legacy hip hop/R&B, verify https stream
-- KDAY 93.5 (LA) — classic hip hop format, verify https stream
+**Hip hop** — still open, no clean match yet
+- WBLS 107.5 (NYC) ruled out — format is urban AC/R&B (Steve Harvey, Quiet Storm),
+  not a mid-90s mixtape hip hop feel
+- KDAY 93.5 (LA) not yet checked
+- Internet-radio brand stations (RadioTunes Classic Hip-Hop, AccuRadio, G93 on
+  Live365) exist but don't fit the roster's character — themed aggregator brands,
+  not real terrestrial/community stations. RadioTunes is also premium-gated.
+- Needs a different angle: maybe a specific college station known for a
+  long-running hip hop show/mix block, rather than a full-format station
 
-**Latino**
-- Charleston 95.5 — local first choice, need to confirm embeddable stream URL
-- Fallback: Radio Latina or a Univision affiliate with a clean public stream
+**Latino** — found a strong local candidate
+- Latina 95.5 / "Kaliente 95.5" (WZJY, Mount Pleasant/Charleston market) —
+  Spanish tropical/Latin pop, owned by Norsan Communications, hosted on Zeno.fm
+- Same situation as RTRFM/FBi: needs a DevTools stream URL extraction from the
+  Zeno.fm player (zeno.fm/radio/latina-95-5-fm-charleston-sc/) since it's not
+  a plain public stream URL
+- Contact if needed: vdelgadillo@norsanmedia.com
 
-**Reggae**
-- Irie FM (Kingston, Jamaica) — the obvious pick, been broadcasting since the 90s
-- Verify stream URL; would be the only international-origin station on the roster
+**Reggae** — found the real deal
+- Irie FM (107.5 FM, Ocho Rios, Jamaica) — on-air since Aug 1990, "Innovative
+  Radio Inspiring Everyone," the flagship Jamaican reggae station. Also on
+  Zeno.fm (zeno.fm/radio/irie-fm/) — same DevTools extraction needed
+- Fallback candidate: Irie Jam Radio (US-based Caribbean diaspora station,
+  iriejamradio.com) if the original Irie FM stream proves unworkable
+- Would be the only international-origin station on the roster
