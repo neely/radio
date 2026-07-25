@@ -214,30 +214,40 @@ Neither field is dead weight — they're ready if the design evolves.
   intentional even as the station count grows — flagged by Benjamin as a feature,
   not a discoverability bug, at least for now.
 
-## Future station candidates (backlog) — research update 2026-07-25
+## Future station candidates (backlog) — research update 2026-07-25 (round 2)
 
-**Hip hop** — still open, no clean match yet
-- WBLS 107.5 (NYC) ruled out — format is urban AC/R&B (Steve Harvey, Quiet Storm),
-  not a mid-90s mixtape hip hop feel
-- KDAY 93.5 (LA) not yet checked
-- Internet-radio brand stations (RadioTunes Classic Hip-Hop, AccuRadio, G93 on
-  Live365) exist but don't fit the roster's character — themed aggregator brands,
-  not real terrestrial/community stations. RadioTunes is also premium-gated.
-- Needs a different angle: maybe a specific college station known for a
-  long-running hip hop show/mix block, rather than a full-format station
+All three now have a real candidate identified. Each needs the same next
+step before it can be added: open the station's player page on-device,
+DevTools > Network tab, find the resolved audio stream URL (same workflow
+already used for RTRFM/FBi).
 
-**Latino** — found a strong local candidate
-- Latina 95.5 / "Kaliente 95.5" (WZJY, Mount Pleasant/Charleston market) —
-  Spanish tropical/Latin pop, owned by Norsan Communications, hosted on Zeno.fm
-- Same situation as RTRFM/FBi: needs a DevTools stream URL extraction from the
-  Zeno.fm player (zeno.fm/radio/latina-95-5-fm-charleston-sc/) since it's not
-  a plain public stream URL
+**Hip hop — KDAY 93.5 (Redondo Beach / Los Angeles)**
+- "LA's Back in the Day Hits Station" — classic 90s hip hop: NWA, Biggie,
+  Tupac. Exactly the mid-90s mixtape feel. FCC-licensed (KDEY-FM), owned by
+  Meruelo Media, not an internet-radio brand.
+- Player page: player.listenlive.co/35791 (hosted by SoCast, a Canadian
+  broadcast CDN — same category of extraction work as the Zeno.fm stations
+  below, different backend)
+- WBLS 107.5 (NYC) ruled out in round 1 — format is urban AC/R&B, not hip hop
+- Internet-radio brand stations (RadioTunes, AccuRadio, G93/Live365) still
+  ruled out — don't fit the roster's character, some premium-gated
+
+**Latino — Latina 95.5 / "Kaliente 95.5" (WZJY, Charleston)**
+- Spanish tropical/Latin pop, Norsan Communications, local to Charleston market
+- Own site (latinatumusica.com/charleston) blocks automated fetch (robots.txt)
+  — needs on-device DevTools pull, can't be resolved remotely
+- Also listed on Zeno.fm (zeno.fm/radio/latina-95-5-fm-charleston-sc/) as an
+  alternate source if the station's own site doesn't yield a clean URL
 - Contact if needed: vdelgadillo@norsanmedia.com
 
-**Reggae** — found the real deal
-- Irie FM (107.5 FM, Ocho Rios, Jamaica) — on-air since Aug 1990, "Innovative
-  Radio Inspiring Everyone," the flagship Jamaican reggae station. Also on
-  Zeno.fm (zeno.fm/radio/irie-fm/) — same DevTools extraction needed
-- Fallback candidate: Irie Jam Radio (US-based Caribbean diaspora station,
-  iriejamradio.com) if the original Irie FM stream proves unworkable
+**Reggae — Zip 103 FM (Kingston, Jamaica)** — replaces Irie FM as the pick
+- Irie FM ruled out: their official stream (listenlive.iriefm.net) requires
+  a paid subscription login — confirmed via app store reviews. Not usable.
+- Zip 103 FM is one of Jamaica's two major FM stations ("DYNAMIC, FUN,
+  REFRESHING, HIGH ENERGY"), dancehall/reggae format, no subscription wall
+- Direct stream URL already found on their own site:
+  https://live.zipfm.net/AudioPlayer/zipfm-website?mount=
+  (found in zipfm.net/radio-live-streaming/ page source — this domain isn't
+  on this session's network allowlist so it couldn't be verified live from
+  here; needs a real-device check to confirm it actually plays)
 - Would be the only international-origin station on the roster
