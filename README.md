@@ -1,3 +1,5 @@
+<img src="icons/favicon.png" width="72" alt="The Dial icon">
+
 # The Dial
 
 A personal web radio player — one page, no frameworks, no build step.
